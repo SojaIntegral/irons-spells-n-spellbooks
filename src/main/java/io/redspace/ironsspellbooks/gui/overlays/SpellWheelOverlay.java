@@ -136,7 +136,7 @@ public class SpellWheelOverlay implements LayeredDraw.Layer {
         var spell = selectedSpell.getSpell();
         var title = spell.getDisplayName(minecraft.player).withStyle(Style.EMPTY.withUnderlined(true));
         var level = Component.translatable("ui.irons_spellbooks.level", TooltipsUtils.getLevelComponenet(selectedSpell, player).withStyle(spell.getRarity(spellLevel).getDisplayName().getStyle()));
-        var mana = Component.translatable("ui.irons_spellbooks.mana_cost", selectedSpell.getSpell().getManaCost(spellLevel)).withStyle(ChatFormatting.AQUA);
+        var mana = Component.translatable("ui.irons_spellbooks.mana_cost", selectedSpell.getSpell().getManaCost(spellLevel, player)).withStyle(ChatFormatting.AQUA);
         var cooldownTicks = MagicManager.getEffectiveSpellCooldown(spell, player, swsm.getSpellSlot(wheelSelection).getCastSource());
         var cooldownTime = Component.translatable("tooltip.irons_spellbooks.cooldown_length_seconds", Utils.timeFromTicks(cooldownTicks, 2)).withStyle(ChatFormatting.YELLOW);
 
@@ -144,7 +144,7 @@ public class SpellWheelOverlay implements LayeredDraw.Layer {
         guiHelper.drawString(font, title, (int) (centerX - font.width(title) / 2), (int) (centerY - (ringOuterEdge + textHeight)), 0xFFFFFF, true);
         int infoHeight = (int) (centerY - (ringOuterEdge + textHeight) + font.lineHeight + textTitleMargin);
         guiHelper.drawString(font, level, (int) (centerX - font.width(level) - textCenterMargin), infoHeight, 0xFFFFFF, true);
-        if (spell.getManaCost(spellLevel) > 0) {
+        if (spell.getManaCost(spellLevel, player) > 0) {
             infoHeight += font.lineHeight;
             guiHelper.drawString(font, mana, (int) (centerX - font.width(mana) - textCenterMargin), infoHeight, 0xFFFFFF, true);
         }

@@ -34,7 +34,7 @@ public class SpellBalanceDebugger {
         var info = spell.getUniqueInfo(spell.getMaxLevel(), null);
         var map = new HashMap<String, String>();
         map.put("Name", Component.translatable(spell.getComponentId()).getString());
-        map.put("Mana Cost", String.valueOf(spell.getManaCost(spell.getMaxLevel())));
+        map.put("Mana Cost", String.valueOf(spell.getManaCost(spell.getMaxLevel(), null)));
         map.put("Cooldown", Utils.timeFromTicks(spell.getSpellCooldown(), 0));
         map.put("Cast Type", spell.getCastType().toString());
         Set<String> tracked = new HashSet<>();

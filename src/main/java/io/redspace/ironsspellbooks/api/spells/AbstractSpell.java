@@ -149,8 +149,12 @@ public abstract class AbstractSpell {
         return levelEvent.getLevel();
     }
 
-    public int getManaCost(int level) {
-        return (int) ((baseManaCost + manaCostPerLevel * (level - 1)) * ServerConfigs.getSpellConfig(this).manaMultiplier());
+    public int getManaCost(int level, @Nullable LivingEntity caster) {
+        double manaCost = 1;
+        if(caster instanceof ServerPlayer serverPlayer) {
+            manaCost = serverPlayer.getAttributeValue(AttributeRegistry.MANA_COST);
+        }
+        return (int) ((baseManaCost + manaCostPerLevel * (level - 1)) * ServerConfigs.getSpellConfig(this).manaMultiplier() * manaCost);
     }
 
     public int getSpellCooldown() {
@@ -302,7 +306,7 @@ public abstract class AbstractSpell {
         var playerRecasts = magicData.getPlayerRecasts();
         var playerAlreadyHasRecast = playerRecasts.hasRecastForSpell(getSpellId());
 
-        var event = new SpellOnCastEvent(serverPlayer, this.getSpellId(), spellLevel, getManaCost(spellLevel), this.getSchoolType(), castSource);
+        var event = new SpellOnCastEvent(serverPlayer, this.getSpellId(), spellLevel, getManaCost(spellLevel, serverPlayer), this.getSchoolType(), castSource);
         NeoForge.EVENT_BUS.post(event);
         if (castSource.consumesMana() && !playerAlreadyHasRecast && !(serverPlayer.isCreative() && !ServerConfigs.CREATIVE_MANA_COST.get())) {
             var newMana = Math.max(magicData.getMana() - event.getManaCost(), 0);
@@ -369,7 +373,7 @@ public abstract class AbstractSpell {
         }
         var playerMana = playerMagicData.getMana();
 
-        boolean hasEnoughMana = playerMana - getManaCost(spellLevel) >= 0;
+        boolean hasEnoughMana = playerMana - getManaCost(spellLevel, player) >= 0;
         boolean isSpellOnCooldown = playerMagicData.getPlayerCooldowns().isOnCooldown(this);
         boolean hasRecastForSpell = playerMagicData.getPlayerRecasts().hasRecastForSpell(getSpellId());
         if (requiresLearning() && !isLearned(player)) {

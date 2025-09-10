@@ -268,7 +268,7 @@ public class InscriptionTableScreen extends AbstractContainerScreen<InscriptionT
         //
         // Mana
         //
-        descLine += drawStatText(font, guiHelper, x + margin, descLine, "ui.irons_spellbooks.mana_cost", textColor, Component.translatable(spell.getManaCost(spellLevel) + ""), colorMana, textScale);
+        descLine += drawStatText(font, guiHelper, x + margin, descLine, "ui.irons_spellbooks.mana_cost", textColor, Component.translatable(spell.getManaCost(spellLevel, minecraft.player) + ""), colorMana, textScale);
 
         //
         // Cast Time

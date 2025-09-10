@@ -67,7 +67,7 @@ public class TooltipsUtils {
         var spellLevel = spell.getLevelFor(spellData.getLevel(), player);
         var title = getTitleComponent(spellData, player);
         var uniqueInfo = spell.getUniqueInfo(spellLevel, player);
-        var manaCost = getManaCostComponent(spell.getCastType(), spell.getManaCost(spellLevel)).withStyle(ChatFormatting.BLUE);
+        var manaCost = getManaCostComponent(spell.getCastType(), spell.getManaCost(spellLevel, player)).withStyle(ChatFormatting.BLUE);
         var cooldownTime = Component.translatable("tooltip.irons_spellbooks.cooldown_length_seconds", Utils.timeFromTicks(MagicManager.getEffectiveSpellCooldown(spell, player, castSource), 2)).withStyle(ChatFormatting.BLUE);
 
         List<MutableComponent> lines = new ArrayList<>();
@@ -77,7 +77,7 @@ public class TooltipsUtils {
         if (spell.getCastType() != CastType.INSTANT) {
             lines.add(Component.literal(" ").append(getCastTimeComponent(spell.getCastType(), Utils.timeFromTicks(spell.getEffectiveCastTime(spellLevel, player), 2)).withStyle(ChatFormatting.BLUE)));
         }
-        if ((castSource != CastSource.SWORD || ServerConfigs.SWORDS_CONSUME_MANA.get()) && spell.getManaCost(spellLevel) > 0) {
+        if ((castSource != CastSource.SWORD || ServerConfigs.SWORDS_CONSUME_MANA.get()) && spell.getManaCost(spellLevel, player) > 0) {
             lines.add(manaCost);
         }
         if ((castSource != CastSource.SWORD || ServerConfigs.SWORDS_CD_MULTIPLIER.get().floatValue() > 0) && spell.getSpellCooldown() > 0) {
@@ -104,7 +104,7 @@ public class TooltipsUtils {
                     .withStyle(ChatFormatting.GRAY);
             var uniqueInfo = spell.getUniqueInfo(spellLevel, player);
             var whenInSpellBook = Component.translatable("tooltip.irons_spellbooks.scroll_tooltip").withStyle(ChatFormatting.GRAY);
-            var manaCost = getManaCostComponent(spell.getCastType(), spell.getManaCost(spellLevel)).withStyle(ChatFormatting.BLUE);
+            var manaCost = getManaCostComponent(spell.getCastType(), spell.getManaCost(spellLevel, player)).withStyle(ChatFormatting.BLUE);
             var cooldownTime = Component.translatable("tooltip.irons_spellbooks.cooldown_length_seconds", Utils.timeFromTicks(MagicManager.getEffectiveSpellCooldown(spell, player, CastSource.SCROLL), 2)).withStyle(ChatFormatting.BLUE);
             MutableComponent castType = null;
             if (spell.getCastType() != CastType.INSTANT) {
@@ -119,7 +119,7 @@ public class TooltipsUtils {
 
             lines.add(Component.empty());
             lines.add(whenInSpellBook);
-            if (spell.getManaCost(spellLevel) > 0) {
+            if (spell.getManaCost(spellLevel, player) > 0) {
                 lines.add(manaCost);
             }
             if (spell.getSpellCooldown() > 0) {

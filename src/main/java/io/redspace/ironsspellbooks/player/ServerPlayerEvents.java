@@ -155,7 +155,7 @@ public class ServerPlayerEvents {
                 if (ClientMagicData.isCasting()) {
                     //IronsSpellbooks.LOGGER.debug("CastingItem.Use.2 {} {}", level.isClientSide, hand);
                     event.setCancellationResult(InteractionResult.CONSUME);
-                } else if (ClientMagicData.getPlayerMana() < spellData.getSpell().getManaCost(spellLevel)
+                } else if (ClientMagicData.getPlayerMana() < spellData.getSpell().getManaCost(spellLevel, player)
                         || ClientMagicData.getCooldowns().isOnCooldown(spellData.getSpell())
                         || !ClientMagicData.getSyncedSpellData(player).isSpellLearned(spellData.getSpell())) {
                     //IronsSpellbooks.LOGGER.debug("CastingItem.Use.3 {} {}", level.isClientSide, hand);
